@@ -11,6 +11,7 @@ provider "aws" {
   # Configuration options
   region = "us-east-1"
 }
+
 variable "ec2_type" {
   type = string
   default = "t2.micro"
@@ -22,15 +23,15 @@ variable "image_id" {
 }
 
 variable "http_sg_id" {
-  type = string
-  default = "sg-0e2ddc835044f6eff"
+  type = list
+  default = ["sg-0e2ddc835044f6eff"]
 }
 
 
 resource "aws_instance" "my-assighment-instance" {
-  ami           = "ami-03a6eaae9938c858c"
-  instance_type = "t2.micro"
-  security_groups = "sg-0e2ddc835044f6eff"
+  ami           = var.image_id
+  instance_type = var.ec2_type
+  vpc_security_group_ids = var.http_sg_id
 
   tags = {
     Name = "My-Terraform-Instance-1"
